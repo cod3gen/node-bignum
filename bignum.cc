@@ -48,14 +48,14 @@ using namespace std;
     Nan::ThrowTypeError("Argument " #I " must be an int64");    \
     return;                                     \
   }                                                           \
-  int64_t VAR = info[I]->ToInteger()->Value();
+  int64_t VAR = Nan::To<Integer>(info[I]).ToLocalChecked();
 
 #define REQ_UINT64_ARG(I, VAR)                                \
   if (info.Length() <= (I) || !info[I]->IsNumber()) {         \
     Nan::ThrowTypeError("Argument " #I " must be a uint64");    \
     return;                                     \
   }                                                           \
-  uint64_t VAR = info[I]->ToInteger()->Value();
+  uint64_t VAR = Nan::To<Integer>(info[I]).ToLocalChecked();
 
 #define REQ_BOOL_ARG(I, VAR)                                  \
   if (info.Length() <= (I) || !info[I]->IsBoolean()) {        \
