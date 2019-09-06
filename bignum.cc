@@ -459,7 +459,7 @@ NAN_METHOD(BigNum::Badd)
 {
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
 
   BN_add(res->bignum_, bignum->bignum_, bn->bignum_);
@@ -473,7 +473,7 @@ NAN_METHOD(BigNum::Bsub)
 {
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
   BN_sub(res->bignum_, bignum->bignum_, bn->bignum_);
 
@@ -487,7 +487,7 @@ NAN_METHOD(BigNum::Bmul)
   AutoBN_CTX ctx;
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
   BN_mul(res->bignum_, bignum->bignum_, bn->bignum_, ctx);
 
@@ -501,7 +501,7 @@ NAN_METHOD(BigNum::Bdiv)
   AutoBN_CTX ctx;
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bi = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bi = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
   BN_div(res->bignum_, NULL, bignum->bignum_, bi->bignum_, ctx);
 
@@ -639,7 +639,7 @@ NAN_METHOD(BigNum::Bmod)
   AutoBN_CTX ctx;
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
   BN_div(NULL, res->bignum_, bignum->bignum_, bn->bignum_, ctx);
 
@@ -672,8 +672,8 @@ NAN_METHOD(BigNum::Bpowm)
   AutoBN_CTX ctx;
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn1 = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
-  BigNum *bn2 = Nan::ObjectWrap::Unwrap<BigNum>(info[1]->ToObject());
+  BigNum *bn1 = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
+  BigNum *bn2 = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[1]).ToLocalChecked());
   BigNum *res = new BigNum();
   BN_mod_exp(res->bignum_, bignum->bignum_, bn1->bignum_, bn2->bignum_, ctx);
 
@@ -688,7 +688,7 @@ NAN_METHOD(BigNum::Upowm)
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
   REQ_UINT64_ARG(0, x);
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[1]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[1]).ToLocalChecked());
   BigNum *exp = new BigNum(x);
 
   BigNum *res = new BigNum();
@@ -765,7 +765,7 @@ NAN_METHOD(BigNum::Bcompare)
 {
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
 
   info.GetReturnValue().Set(Nan::New<Number>(BN_cmp(bignum->bignum_, bn->bignum_)));
 }
@@ -895,7 +895,7 @@ BigNum::Bop(Nan::NAN_METHOD_ARGS_TYPE info, int op)
   Nan::EscapableHandleScope scope;
 
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
 
   bool bignumNegative = BN_is_negative(bignum->bignum_);
   bool bnNegative = BN_is_negative(bn->bignum_);
@@ -1024,7 +1024,7 @@ NAN_METHOD(BigNum::Binvertm)
   AutoBN_CTX ctx;
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
   BN_mod_inverse(res->bignum_, bignum->bignum_, bn->bignum_, ctx);
 
@@ -1058,7 +1058,7 @@ NAN_METHOD(BigNum::Bgcd)
   AutoBN_CTX ctx;
   BigNum *bignum = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bi = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bi = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   BigNum *res = new BigNum();
 
   BN_gcd(res->bignum_, bignum->bignum_, bi->bignum_, ctx);
@@ -1072,7 +1072,7 @@ NAN_METHOD(BigNum::Bjacobi)
   AutoBN_CTX ctx;
   BigNum *bn_a = Nan::ObjectWrap::Unwrap<BigNum>(info.This());
 
-  BigNum *bn_n = Nan::ObjectWrap::Unwrap<BigNum>(info[0]->ToObject());
+  BigNum *bn_n = Nan::ObjectWrap::Unwrap<BigNum>(Nan::To<Object>(info[0]).ToLocalChecked());
   int res = 0;
 
   if (BN_jacobi_priv(bn_a->bignum_, bn_n->bignum_, &res, ctx) == -1) {
