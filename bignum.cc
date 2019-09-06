@@ -66,7 +66,7 @@ using namespace std;
 
 #define WRAP_RESULT(RES, VAR)                                           \
   Local<Value> arg[1] = { Nan::New<External>(static_cast<BigNum*>(RES)) };  \
-  Local<Object> VAR = Nan::NewInstance(Nan::New<FunctionTemplate>(constructor_template)->GetFunction(context).ToLocalChecked(),      \
+  Local<Object> VAR = Nan::NewInstance(Nan::New<FunctionTemplate>(constructor_template)->GetFunction(Nan::GetCurrentContext()).ToLocalChecked(),      \
     1, arg).ToLocalChecked();
 
 class AutoBN_CTX
@@ -288,7 +288,7 @@ void BigNum::Initialize(v8::Local<v8::Object> target) {
   Nan::SetPrototypeMethod(tmpl, "setCompact", Bsetcompact);
   Nan::SetPrototypeMethod(tmpl, "isbitset", IsBitSet);
 
-  target->Set(Nan::New("BigNum").ToLocalChecked(), tmpl->GetFunction(context).ToLocalChecked());
+  target->Set(Nan::New("BigNum").ToLocalChecked(), tmpl->GetFunction(Nan::GetCurrentContext()).ToLocalChecked());
 }
 
 BigNum::BigNum(const Nan::Utf8String& str, uint64_t base) : Nan::ObjectWrap (),
@@ -382,7 +382,7 @@ NAN_METHOD(BigNum::New)
 
     Nan::TryCatch tryCatch;
     Nan::MaybeLocal<Object> newInstMaybeLocal = Nan::NewInstance(
-        Nan::New<FunctionTemplate>(constructor_template)->GetFunction(context).ToLocalChecked(), len, newArgs);
+        Nan::New<FunctionTemplate>(constructor_template)->GetFunction(Nan::GetCurrentContext()).ToLocalChecked(), len, newArgs);
     if (tryCatch.HasCaught()) {
         tryCatch.ReThrow();
         return;
