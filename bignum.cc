@@ -415,8 +415,8 @@ NAN_METHOD(BigNum::New)
       return;
     }
 
-    Nan::Utf8String str(obj->ToObject()->Get(Nan::New("num").ToLocalChecked())->ToString());
-    base = Nan::To<int64_t>(obj->ToObject()->Get(Nan::New("base").ToLocalChecked())).FromJust();
+    Nan::Utf8String str(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("num").ToLocalChecked())->ToString());
+    base = Nan::To<int64_t>(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("base").ToLocalChecked())).FromJust();
 
     bignum = new BigNum(str, base);
   }
