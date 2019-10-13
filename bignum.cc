@@ -1128,7 +1128,7 @@ init (Local<Object> exports, Local<Context> context)
   Nan::HandleScope scope;
 
   BigNum::Initialize(exports);
-  Nan::SetMethod(target, "setJSConditioner", SetJSConditioner);
+  Nan::SetMethod(exports, "setJSConditioner", SetJSConditioner);
 }
 
 NODE_MODULE(bignum, init)
