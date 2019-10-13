@@ -1121,61 +1121,13 @@ static NAN_METHOD(SetJSConditioner)
   return;
 }
 
-NODE_MODULE_INIT(/* exports, module, context */) {
-	Nan::HandleScope scope;
-	Isolate* isolate = context->GetIsolate();
+extern "C" void
+init (Local<Object> target)
+{
+  Nan::HandleScope scope;
 
-	Local<FunctionTemplate> tmpl = Nan::New<FunctionTemplate>(New);
-	constructor_template.Reset(tmpl);
-	tmpl->InstanceTemplate()->SetInternalFieldCount(1);
-	tmpl->SetClassName(Nan::New(isolate, "BigNum").ToLocalChecked());
-
-	Nan::SetMethod(tmpl, "uprime0", Uprime0);
-
-	Nan::SetPrototypeMethod(tmpl, "tostring", ToString);
-	Nan::SetPrototypeMethod(tmpl, "badd", Badd);
-	Nan::SetPrototypeMethod(tmpl, "bsub", Bsub);
-	Nan::SetPrototypeMethod(tmpl, "bmul", Bmul);
-	Nan::SetPrototypeMethod(tmpl, "bdiv", Bdiv);
-	Nan::SetPrototypeMethod(tmpl, "uadd", Uadd);
-	Nan::SetPrototypeMethod(tmpl, "usub", Usub);
-	Nan::SetPrototypeMethod(tmpl, "umul", Umul);
-	Nan::SetPrototypeMethod(tmpl, "udiv", Udiv);
-	Nan::SetPrototypeMethod(tmpl, "umul2exp", Umul_2exp);
-	Nan::SetPrototypeMethod(tmpl, "udiv2exp", Udiv_2exp);
-	Nan::SetPrototypeMethod(tmpl, "babs", Babs);
-	Nan::SetPrototypeMethod(tmpl, "bneg", Bneg);
-	Nan::SetPrototypeMethod(tmpl, "bmod", Bmod);
-	Nan::SetPrototypeMethod(tmpl, "umod", Umod);
-	Nan::SetPrototypeMethod(tmpl, "bpowm", Bpowm);
-	Nan::SetPrototypeMethod(tmpl, "upowm", Upowm);
-	Nan::SetPrototypeMethod(tmpl, "upow", Upow);
-	Nan::SetPrototypeMethod(tmpl, "brand0", Brand0);
-	Nan::SetPrototypeMethod(tmpl, "probprime", Probprime);
-	Nan::SetPrototypeMethod(tmpl, "bcompare", Bcompare);
-	Nan::SetPrototypeMethod(tmpl, "scompare", Scompare);
-	Nan::SetPrototypeMethod(tmpl, "ucompare", Ucompare);
-	Nan::SetPrototypeMethod(tmpl, "band", Band);
-	Nan::SetPrototypeMethod(tmpl, "bor", Bor);
-	Nan::SetPrototypeMethod(tmpl, "bxor", Bxor);
-	Nan::SetPrototypeMethod(tmpl, "binvertm", Binvertm);
-	Nan::SetPrototypeMethod(tmpl, "bsqrt", Bsqrt);
-	Nan::SetPrototypeMethod(tmpl, "broot", Broot);
-	Nan::SetPrototypeMethod(tmpl, "bitLength", BitLength);
-	Nan::SetPrototypeMethod(tmpl, "gcd", Bgcd);
-	Nan::SetPrototypeMethod(tmpl, "jacobi", Bjacobi);
-	Nan::SetPrototypeMethod(tmpl, "setCompact", Bsetcompact);
-	Nan::SetPrototypeMethod(tmpl, "isbitset", IsBitSet);
-
-
-	exports->Set(context, String::NewFromUtf8(isolate, "setJSConditioner", NewStringType::kNormal).ToLocalChecked(),
-		FunctionTemplate::New(isolate, SetJSConditioner)->GetFunction(context).ToLocalChecked()).FromJust();
-	exports->Set(context, String::NewFromUtf8(isolate, "BigNum", NewStringType::kNormal).ToLocalChecked(),
-		tmpl->GetFunction(context).ToLocalChecked()).FromJust();
-
-	Nan::SetMethod(target, "setJSConditioner", SetJSConditioner);
+  BigNum::Initialize(target);
+  Nan::SetMethod(target, "setJSConditioner", SetJSConditioner);
 }
 
-NODE_MODULE_INIT(/* exports, module, context */) {
-	Init(exports, context);
-}
+NODE_MODULE(bignum, init)
