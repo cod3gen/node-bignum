@@ -54,8 +54,8 @@ using namespace std;
   if (info.Length() <= (I) || !info[I]->IsNumber()) {         \
     Nan::ThrowTypeError("Argument " #I " must be a uint64");    \
     return;                                     \
-  }                                                           \
-  uint64_t VAR = Nan::To<Integer>(info[I]).ToLocalChecked();
+  }                                                    \
+  v8::Local<v8::Uint64> Nan::New<T>(uint64_t VAR);
 
 #define REQ_BOOL_ARG(I, VAR)                                  \
   if (info.Length() <= (I) || !info[I]->IsBoolean()) {        \
@@ -414,7 +414,6 @@ NAN_METHOD(BigNum::New)
       Nan::ThrowError("Invalid type passed to bignum constructor");
       return;
     }
-
     Nan::Utf8String str(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("num").ToLocalChecked())->ToString());
     base = Nan::To<int64_t>(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("base").ToLocalChecked())).FromJust();
 
