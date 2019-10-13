@@ -55,7 +55,7 @@ using namespace std;
     Nan::ThrowTypeError("Argument " #I " must be a uint64");    \
     return;                                     \
   }                                                    \
-  v8::Local<v8::Uint64> Nan::New<I>(uint64_t VAR);
+  v8::Local<v8::Number> Nan::New<I>(uint64_t VAR);
 
 #define REQ_BOOL_ARG(I, VAR)                                  \
   if (info.Length() <= (I) || !info[I]->IsBoolean()) {        \
