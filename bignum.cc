@@ -55,7 +55,7 @@ using namespace std;
     Nan::ThrowTypeError("Argument " #I " must be a uint64");    \
     return;                                     \
   }                                                           \
-  uint64_t VAR = Nan::To<Integer>(info[I]).ToLocalChecked();
+  uint64_t VAR = info[I]->ToInteger(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->Value();
 
 #define REQ_BOOL_ARG(I, VAR)                                  \
   if (info.Length() <= (I) || !info[I]->IsBoolean()) {        \
