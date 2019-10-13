@@ -1132,5 +1132,5 @@ init (Local<Object> target)
 
 //NODE_MODULE(bignum, init)
 NODE_MODULE_INIT(/* exports, module, context */) {
-	Init(target, context);
+	Init(exports, context);
 }
