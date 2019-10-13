@@ -1122,14 +1122,16 @@ static NAN_METHOD(SetJSConditioner)
 }
 
 extern "C" void
-init (Local<Object> target)
+init (Local<Object> exports, Local<Context> context)
 {
+	Isolate* isolate = context->GetIsolate();
   Nan::HandleScope scope;
 
-  BigNum::Initialize(target);
+  BigNum::Initialize(exports);
   Nan::SetMethod(target, "setJSConditioner", SetJSConditioner);
 }
 
+NODE_MODULE(bignum, init)
 NODE_MODULE_INIT(/* exports, module, context */) {
 	Init(exports, context);
 }
