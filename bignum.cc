@@ -54,8 +54,8 @@ using namespace std;
   if (info.Length() <= (I) || !info[I]->IsNumber()) {         \
     Nan::ThrowTypeError("Argument " #I " must be a uint64");    \
     return;                                     \
-  }                                                    \
-  v8::Local<v8::Number> Nan::New<I>(uint64_t VAR);
+  }                                                           \
+  uint64_t VAR = Nan::To<Integer>(info[I]).ToLocalChecked();
 
 #define REQ_BOOL_ARG(I, VAR)                                  \
   if (info.Length() <= (I) || !info[I]->IsBoolean()) {        \
@@ -406,14 +406,16 @@ NAN_METHOD(BigNum::New)
     for (int i = 0; i < len; i++) {
       newArgs[i] = info[i];
     }
-    Local<Value> obj = Nan::New<Function>(js_conditioner)->
-      Call(ctx, info.Length(), newArgs);
-    delete[] newArgs;
+	Local<Value> obj;
+	const int ok = Nan::New<Function>(js_conditioner)->
+		Call(currentContext, ctx, info.Length(), newArgs).ToLocal(&obj);
+	delete[] newArgs;
 
-    if (!*obj) {
+	if (!ok) {
       Nan::ThrowError("Invalid type passed to bignum constructor");
       return;
     }
+
     Nan::Utf8String str(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("num").ToLocalChecked())->ToString());
     base = Nan::To<int64_t>(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("base").ToLocalChecked())).FromJust();
 
