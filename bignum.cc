@@ -48,7 +48,7 @@ using namespace std;
     Nan::ThrowTypeError("Argument " #I " must be an int64");    \
     return;                                     \
   }                                                           \
-  int64_t VAR = Nan::To<Integer>(info[I]).ToLocalChecked();
+  int64_t VAR = info[I]->ToInteger(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->Value();
 
 #define REQ_UINT64_ARG(I, VAR)                                \
   if (info.Length() <= (I) || !info[I]->IsNumber()) {         \
@@ -62,7 +62,7 @@ using namespace std;
     Nan::ThrowTypeError("Argument " #I " must be a boolean");   \
     return;                                     \
   }                                                           \
-  bool VAR = info[I]->ToBoolean()->Value();
+  bool VAR = info[I]->ToBoolean(info.GetIsolate()->GetCurrentContext()).ToLocalChecked()->Value();
 
 #define WRAP_RESULT(RES, VAR)                                           \
   Local<Value> arg[1] = { Nan::New<External>(static_cast<BigNum*>(RES)) };  \
