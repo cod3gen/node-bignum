@@ -1130,4 +1130,7 @@ init (Local<Object> target)
   Nan::SetMethod(target, "setJSConditioner", SetJSConditioner);
 }
 
-NODE_MODULE(bignum, init)
+//NODE_MODULE(bignum, init)
+NODE_MODULE_INIT(/* exports, module, context */) {
+	Init(target, context);
+}
