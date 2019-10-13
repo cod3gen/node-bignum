@@ -408,7 +408,7 @@ NAN_METHOD(BigNum::New)
     }
 	Local<Value> obj;
 	const int ok = Nan::New<Function>(js_conditioner)->
-		Call(currentContext, ctx, info.Length(), newArgs).ToLocal(&obj);
+		Call(Nan::GetCurrentContext(), ctx, info.Length(), newArgs).ToLocal(&obj);
 	delete[] newArgs;
 
 	if (!ok) {
