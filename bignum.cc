@@ -1122,7 +1122,7 @@ static NAN_METHOD(SetJSConditioner)
 }
 
 extern "C" void
-init (Local<Object> exports, Local<Object> target, Local<Context> context)
+init (Local<Object> target)
 {
   Nan::HandleScope scope;
 
@@ -1130,7 +1130,4 @@ init (Local<Object> exports, Local<Object> target, Local<Context> context)
   Nan::SetMethod(target, "setJSConditioner", SetJSConditioner);
 }
 
-//NODE_MODULE(bignum, init)
-NODE_MODULE_INIT(/* exports, module, context */) {
-	Init(exports, module, context);
-}
+NODE_MODULE(bignum, init)
