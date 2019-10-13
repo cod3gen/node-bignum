@@ -66,8 +66,11 @@ using namespace std;
 
 #define WRAP_RESULT(RES, VAR)                                           \
   Local<Value> arg[1] = { Nan::New<External>(static_cast<BigNum*>(RES)) };  \
-  Local<Object> VAR = Nan::NewInstance(Nan::New<FunctionTemplate>(constructor_template)->GetFunction(Nan::GetCurrentContext()).ToLocalChecked(),      \
-    1, arg).ToLocalChecked();
+  Local<Object> VAR = Nan::NewInstance(  \
+    Nan::New<FunctionTemplate>(constructor_template)->GetFunction(info.GetIsolate()->GetCurrentContext()).ToLocalChecked(), \
+    1, \
+    arg \
+  ).ToLocalChecked();
 
 class AutoBN_CTX
 {
@@ -397,6 +400,8 @@ NAN_METHOD(BigNum::New)
   BigNum *bignum;
   uint64_t base;
 
+  Local<Context> currentContext = info.GetIsolate()->GetCurrentContext();
+
   if (info[0]->IsExternal()) {
     bignum = static_cast<BigNum*>(External::Cast(*(info[0]))->Value());
   } else {
@@ -406,17 +411,18 @@ NAN_METHOD(BigNum::New)
     for (int i = 0; i < len; i++) {
       newArgs[i] = info[i];
     }
-    Local<Value> obj = Nan::New<Function>(js_conditioner)->
-      Call(ctx, info.Length(), newArgs);
+	Local<Value> obj;
+	const int ok = Nan::New<Function>(js_conditioner)->
+		Call(currentContext, ctx, info.Length(), newArgs).ToLocal(&obj);
     delete[] newArgs;
 
-    if (!*obj) {
+	if (!ok) {
       Nan::ThrowError("Invalid type passed to bignum constructor");
       return;
     }
 
-    Nan::Utf8String str(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("num").ToLocalChecked())->ToString());
-    base = Nan::To<int64_t>(obj->Nan::To<Object>(obj).ToLocalChecked()->Get(Nan::New("base").ToLocalChecked())).FromJust();
+	Nan::Utf8String str(obj->ToObject(currentContext).ToLocalChecked()->Get(Nan::New("num").ToLocalChecked())->ToString(currentContext).ToLocalChecked());
+	base = Nan::To<int64_t>(obj->ToObject(currentContext).ToLocalChecked()->Get(Nan::New("base").ToLocalChecked())).FromJust();
 
     bignum = new BigNum(str, base);
   }
