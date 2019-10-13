@@ -6,6 +6,10 @@
       'include_dirs': [
         "<!(node -e \"require('nan')\")"
       ],
+      "cflags_cc": [
+                "-std=c++11",
+                "-fexceptions"
+            ],
       'conditions': [
         # For Windows, require either a 32-bit or 64-bit
         # separately-compiled OpenSSL library.
