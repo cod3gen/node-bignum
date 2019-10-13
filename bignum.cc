@@ -1131,7 +1131,6 @@ init (Local<Object> exports, Local<Context> context)
   Nan::SetMethod(exports, "setJSConditioner", SetJSConditioner);
 }
 
-NODE_MODULE(bignum, init)
 NODE_MODULE_INIT(/* exports, module, context */) {
 	Init(exports, context);
 }
